@@ -1,0 +1,72 @@
+
+package com.textadventure.game;
+
+import com.textadventure.model.Player;
+import com.textadventure.model.Room;
+import com.textadventure.engine.GameLoader;
+import com.textadventure.engine.GameLoader.GameDataException;
+
+import com.google.gson.JsonSyntaxException;
+import java.io.IOException;
+import java.util.Map;
+
+public class Game {
+
+    private Map<String, Room> rooms;
+    private Player player;
+    private final GameLoader gameLoader;
+
+    public Game() {
+        this.gameLoader = new GameLoader();
+        System.out.println("Game object created. GameLoader is ready.");
+    }
+
+    public void initialize(String dataFilePath) throws IOException, JsonSyntaxException, GameDataException, IllegalArgumentException {
+
+        System.out.println("----------------------------------------");
+        System.out.println("Initializing game from data file: " + dataFilePath + "...");
+        System.out.println("----------------------------------------");
+
+        gameLoader.loadGameData(dataFilePath);
+
+        this.rooms = gameLoader.getLoadedRooms();
+
+        if (this.rooms == null || this.rooms.isEmpty()) {
+            throw new GameDataException("Initialization failed: No rooms were loaded.");
+        }
+
+        String startRoomName = gameLoader.getPlayerStartRoomName();
+
+        if (startRoomName == null || !this.rooms.containsKey(startRoomName)) {
+            throw new GameDataException("Invalid starting room: " + startRoomName);
+        }
+
+        this.player = new Player(startRoomName);
+        this.player.setCurrentRoomName(startRoomName);
+
+        System.out.println("Player created. Starting in room: " + startRoomName);
+        System.out.println("Game initialization complete.");
+        System.out.println("Player is ready at location: " + this.player.getCurrentRoomName());
+    }
+
+    public Room getRoom(String roomName) {
+        if (this.rooms == null) {
+            return null;
+        }
+        return this.rooms.get(roomName);
+    }
+
+    public Room getCurrentRoom() {
+        if (this.player == null) {
+            return null;
+        }
+        String roomName = this.player.getCurrentRoomName();
+        if (roomName == null) {
+            return null;
+        }
+        return getRoom(roomName);
+    }
+    public void processCommand(String[] commandParts) {
+        System.out.println("[Game.processCommand] Received command: " + java.util.Arrays.toString(commandParts));
+    }
+}

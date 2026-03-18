@@ -1,0 +1,106 @@
+package com.textadventure.model;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+public class Room {
+
+    private String name;
+    private String description;
+    private List<ConditionalDescription> conditionalDescriptions;
+
+ 
+    private Map<String, ExitData> exits;
+
+    private List<Item> items;
+
+    public Room(String name, String description) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Room name cannot be null or empty");
+        }
+        if (description == null) {
+            throw new IllegalArgumentException("Room description cannot be null");
+        }
+
+        this.name = name.trim();
+        this.description = description;
+
+        this.exits = new HashMap<>();
+        this.conditionalDescriptions = new ArrayList<>();
+        
+        this.items = new ArrayList<>();     
+    }
+
+
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public Map<String, ExitData> getExits() {
+        return this.exits;
+    }
+
+    public List<Item> getItems() {
+        return this.items;
+    }
+
+
+    public void addItem(Item item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Cannot add null item to room");
+        }
+        this.items.add(item);
+    }
+
+    public boolean removeItem(Item item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Cannot remove null item from room");
+        }
+        return this.items.remove(item);
+    }
+
+    public Optional<Item> findItemByName(String itemName) {
+        if (itemName == null || itemName.trim().isEmpty()) {
+            return Optional.empty();
+        }
+
+        for (Item item : items) {
+            if (item.getName().equalsIgnoreCase(itemName)) {
+                return Optional.of(item);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+   
+    public void addExit(String direction, ExitData exitData) {
+        if (direction == null || direction.trim().isEmpty()) {
+            throw new IllegalArgumentException("Exit direction cannot be null or empty");
+        }
+        if (exitData == null) {
+            throw new IllegalArgumentException("ExitData cannot be null");
+        }
+
+        String normalizedDirection = direction.trim().toLowerCase();
+        this.exits.put(normalizedDirection, exitData);
+    }
+
+  
+    public List<ConditionalDescription> getConditionalDescriptions() {
+        return this.conditionalDescriptions;
+    }
+    public void setDescription(String newDescription) {
+        if (newDescription != null && !newDescription.trim().isEmpty()) {
+            this.description = newDescription;
+        }
+    }
+}

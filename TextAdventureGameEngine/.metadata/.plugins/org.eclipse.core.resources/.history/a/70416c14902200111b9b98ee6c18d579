@@ -1,0 +1,227 @@
+package com.textadventure.engine;
+
+import com.textadventure.model.Room;
+import com.textadventure.model.Item;
+import com.textadventure.model.ExitData;
+import com.textadventure.model.Conditions;
+import com.textadventure.model.ConditionalDescription;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
+public class GameLoader {
+
+    private static class ItemData {
+        String name;
+        String description;
+    }
+
+
+    private static class RoomData {
+        String name;
+        String description;
+        Map<String, ExitData> exits;
+        List<ConditionalDescription> conditionalDescriptions;
+    }
+
+    private static class GameData {
+        String playerStart;
+        List<ItemData> items;
+        List<RoomData> rooms;
+    }
+
+    private Map<String, Room> loadedRooms;
+    private Map<String, Item> loadedItems;
+    private String playerStartRoomName;
+
+    private final Gson gson;
+
+    public GameLoader() {
+        this.loadedRooms = new HashMap<>();
+        this.loadedItems = new HashMap<>();
+        this.gson = new Gson();
+    }
+
+    public void loadGameData(String filePath) throws IOException, JsonSyntaxException, IllegalArgumentException, GameDataException {
+
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new IllegalArgumentException("File path cannot be null or empty.");
+        }
+
+        Path path = Paths.get(filePath);
+        String jsonContent;
+
+        try {
+            jsonContent = Files.readString(path);
+        } catch (IOException e) {
+            throw new IOException("Failed to read game data file: " + filePath, e);
+        }
+
+        GameData gameData;
+
+        try {
+            gameData = gson.fromJson(jsonContent, GameData.class);
+            if (gameData == null) {
+                throw new GameDataException("Parsed game data is null.");
+            }
+        } catch (JsonSyntaxException e) {
+            throw e;
+        }
+
+        processIntermediateData(gameData);
+    }
+
+    private void processIntermediateData(GameData gameData) throws GameDataException {
+
+        if (gameData.items == null) {
+            gameData.items = new ArrayList<>();
+        }
+
+        if (gameData.rooms == null) {
+            throw new GameDataException("Rooms array missing.");
+        }
+
+        if (gameData.playerStart == null || gameData.playerStart.trim().isEmpty()) {
+            throw new GameDataException("Player start missing.");
+        }
+
+
+        for (ItemData itemData : gameData.items) {
+            if (itemData == null || itemData.name == null || itemData.name.trim().isEmpty()) {
+                continue;
+            }
+
+            String itemName = itemData.name.trim();
+
+            if (loadedItems.containsKey(itemName.toLowerCase())) {
+                throw new GameDataException("Duplicate item: " + itemName);
+            }
+
+            String itemDesc = itemData.description != null ? itemData.description : "An item.";
+            Item item = new Item(itemName, itemDesc);
+
+     
+            loadedItems.put(itemName.toLowerCase(), item);
+        }
+
+
+        for (RoomData roomData : gameData.rooms) {
+
+            if (roomData == null || roomData.name == null || roomData.name.trim().isEmpty()) {
+                continue;
+            }
+
+            String roomName = roomData.name.trim();
+
+            if (loadedRooms.containsKey(roomName)) {
+                throw new GameDataException("Duplicate room: " + roomName);
+            }
+
+            String roomDesc = roomData.description != null ? roomData.description : "A room.";
+            Room room = new Room(roomName, roomDesc);
+            loadedRooms.put(roomName, room);
+        }
+
+
+        for (RoomData roomData : gameData.rooms) {
+
+            if (roomData == null || roomData.name == null || roomData.name.trim().isEmpty()) {
+                continue;
+            }
+
+            String roomName = roomData.name.trim();
+            Room currentRoom = loadedRooms.get(roomName);
+            if (roomData.conditionalDescriptions != null) {
+                currentRoom.getConditionalDescriptions().addAll(roomData.conditionalDescriptions);
+            }
+
+            if (roomData.exits != null) {
+
+                for (Map.Entry<String, ExitData> entry : roomData.exits.entrySet()) {
+
+                    String direction = entry.getKey();
+                    ExitData exitData = entry.getValue();
+
+                    if (direction == null || exitData == null) {
+                        continue;
+                    }
+
+                    String targetRoom = exitData.getTargetRoom();
+
+                    if (targetRoom == null || targetRoom.trim().isEmpty()) {
+                        throw new GameDataException("Missing targetRoom in exit: " + roomName);
+                    }
+
+                    if (!loadedRooms.containsKey(targetRoom.trim())) {
+                        throw new GameDataException("Broken exit: " + roomName + " -> " + targetRoom);
+                    }
+
+                    currentRoom.addExit(direction.toLowerCase().trim(), exitData);
+                }
+            }
+
+
+            if (roomData.items != null) {
+
+                for (String itemName : roomData.items) {
+
+                    if (itemName == null || itemName.trim().isEmpty()) {
+                        continue;
+                    }
+
+                    Item item = loadedItems.get(itemName.trim().toLowerCase());
+
+                    if (item == null) {
+                        throw new GameDataException("Undefined item: " + itemName);
+                    }
+
+                    currentRoom.addItem(item);
+                }
+            }
+        }
+
+
+        String startRoom = gameData.playerStart.trim();
+
+        if (!loadedRooms.containsKey(startRoom)) {
+            throw new GameDataException("Invalid start room: " + startRoom);
+        }
+
+        this.playerStartRoomName = startRoom;
+    }
+
+
+    public Map<String, Room> getLoadedRooms() {
+        return loadedRooms;
+    }
+
+    public Map<String, Item> getLoadedItems() {
+        return loadedItems;
+    }
+
+    public String getPlayerStartRoomName() {
+        return playerStartRoomName;
+    }
+
+
+
+    public static class GameDataException extends Exception {
+        public GameDataException(String message) {
+            super(message);
+        }
+
+        public GameDataException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+}

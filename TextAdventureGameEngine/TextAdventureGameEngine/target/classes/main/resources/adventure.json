@@ -1,0 +1,93 @@
+{
+  "playerStart": "Dark Cellar",
+
+  "items": [
+    {
+      "name": "sturdy plank",
+      "description": "A long wooden plank.",
+      "usability": {
+        "target": "broken staircase",
+        "effectDescription": "You place the plank across the gap, making the staircase usable.",
+        "consumesItem": false,
+        "removesTarget": null,
+        "addsTarget": null,
+        "changesRoomDescriptionTo": "The staircase is now stable enough to climb.",
+        "addsItemToInventory": null
+      }
+    },
+    {
+      "name": "empty bottle",
+      "description": "A dusty empty bottle."
+    },
+    {
+      "name": "rusty key",
+      "description": "An old rusted key."
+    }
+  ],
+
+  "rooms": [
+    {
+      "name": "Dark Cellar",
+      "description": "Cold, damp air clings to your skin. The cellar smells of earth and mildew.",
+      "exits": {
+        "east": {
+          "targetRoom": "Wine Rack Corner"
+        },
+        "north": {
+          "targetRoom": "Under the Stairs"
+        }
+      },
+      "items": ["empty bottle"]
+    },
+    {
+      "name": "Wine Rack Corner",
+      "description": "Dusty wooden racks line the walls, filled with broken bottles.",
+      "exits": {
+        "west": {
+          "targetRoom": "Dark Cellar"
+        }
+      },
+      "items": ["rusty key"]
+    },
+    {
+      "name": "Under the Stairs",
+      "description": "This cramped area is cluttered with debris. Something long catches your eye.",
+      "exits": {
+        "south": {
+          "targetRoom": "Dark Cellar"
+        },
+        "north": {
+          "targetRoom": "Broken Staircase"
+        }
+      },
+      "items": ["sturdy plank"]
+    },
+    {
+      "name": "Broken Staircase",
+      "description": "Several steps are missing, leaving a dangerous gap.",
+      "exits": {
+        "south": {
+          "targetRoom": "Under the Stairs"
+        },
+        "up": {
+          "targetRoom": "Upstairs Landing",
+          "conditions": {
+            "requiresItem": "sturdy plank",
+            "failMessage": "You can't climb up without fixing the staircase."
+          }
+        }
+      },
+      "items": []
+    },
+    {
+      "name": "Upstairs Landing",
+      "description": "Fresh air fills your lungs. You made it out.",
+      "exits": {
+        "down": {
+          "targetRoom": "Broken Staircase"
+        }
+      },
+      "items": []
+    }
+  ]
+}

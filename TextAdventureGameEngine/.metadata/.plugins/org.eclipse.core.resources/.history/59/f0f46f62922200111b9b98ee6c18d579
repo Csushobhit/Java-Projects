@@ -1,0 +1,125 @@
+package com.textadventure;
+
+import com.textadventure.game.Game;
+import com.textadventure.model.ExitData;
+import com.textadventure.model.Item;
+import com.textadventure.model.Room;
+import com.textadventure.engine.GameLoader.GameDataException;
+import com.textadventure.engine.CommandParser;
+import com.google.gson.JsonSyntaxException;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.Arrays;
+
+public class Main {
+
+    private static final String ADVENTURE_DATA_PATH = "/TextAdventureGameEngine/src/adventure.json";
+
+    public static void main(String[] args) {
+
+        System.out.println("=========================================");
+        System.out.println(" Welcome to the Text Adventure Engine! ");
+        System.out.println("=========================================");
+        System.out.println("Starting application...");
+
+        Game game = new Game();
+
+        try {
+            game.initialize(ADVENTURE_DATA_PATH);
+            System.out.println("Game initialization successful.");
+        } catch (IOException e) {
+            System.err.println("Cannot read game data file.");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return;
+        } catch (JsonSyntaxException e) {
+            System.err.println("Invalid JSON syntax in game data file.");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return;
+        } catch (GameDataException e) {
+            System.err.println("Invalid game data structure.");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return;
+        } catch (IllegalArgumentException e) {
+            System.err.println("Invalid argument provided.");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return;
+        } catch (Exception e) {
+            System.err.println("Unexpected error during initialization.");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return;
+        }
+
+        CommandParser commandParser = new CommandParser();
+        Scanner scanner = new Scanner(System.in);
+
+        boolean gameRunning = true;
+
+        while (gameRunning) {
+
+            Room currentRoom = game.getCurrentRoom();
+
+            if (currentRoom == null) {
+                System.err.println("Check JSON data integrity and Game/Player class logic.");
+                gameRunning = false;
+                break;
+            }
+
+            System.out.println("=========================================");
+            System.out.println("Location: " + currentRoom.getName());
+            System.out.println("-----------------------------------------");
+            System.out.println(currentRoom.getDescription());
+
+            List<Item> itemsInRoom = currentRoom.getItems();
+
+            if (itemsInRoom != null && !itemsInRoom.isEmpty()) {
+                String itemsNames = itemsInRoom.stream().map(Item::getName).collect(Collectors.joining(", "));
+                System.out.println("-----------------------------------------");
+                System.out.println("You see: " + itemsNames + ".");
+            }
+
+            Map<String, ExitData> exits = currentRoom.getExits();
+
+            if (exits != null && !exits.isEmpty()) {
+                String exitDirections = exits.keySet().stream().sorted().collect(Collectors.joining(" "));
+                System.out.println("-----------------------------------------");
+                System.out.println("Exits: " + exitDirections);
+            }
+
+            System.out.println("=========================================");
+            System.out.print("> ");
+
+            String userInput = scanner.nextLine();
+
+            String[] commandParts = commandParser.parse(userInput);
+
+            if (commandParts.length > 0) {
+
+                String commandVerb = commandParts[0];
+
+                if (commandVerb.equals("quit") || commandVerb.equals("exit")) {
+                    gameRunning = false;
+                    System.out.println("Quitting game. Goodbye!");
+                } else {
+                    game.processCommand(commandParts);
+                }
+
+            } else {
+                System.out.println("Please enter a command.");
+            }
+        }
+
+        scanner.close();
+
+        System.out.println("=========================================");
+        System.out.println("Thank you for playing!");
+        System.out.println("=========================================");
+    }
+}

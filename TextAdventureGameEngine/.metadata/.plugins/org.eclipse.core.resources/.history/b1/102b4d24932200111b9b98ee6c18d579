@@ -1,0 +1,66 @@
+{
+  "playerStart": "Dark Cellar",
+
+  "items": [
+    {
+  "name": "sturdy plank",
+  "description": "A long wooden plank.",
+  "usability": {
+    "target": "broken staircase",
+    "effectDescription": "You place the plank across the gap, making the staircase usable.",
+    "consumesItem": false,
+    "unlocksExit": "up",
+    "removesTarget": null,
+    "addsTarget": null,
+    "changesRoomDescriptionTo": "The staircase is now stable enough to climb.",
+    "addsItemToInventory": null
+  }
+}
+  ],
+
+  "rooms": [
+    {
+      "name": "Dark Cellar",
+      "description": "Cold, damp air clings to your skin. The cellar smells of earth and mildew. Faint light reveals stone walls and a low ceiling. A weak draft brushes past you from the east.",
+      "exits": {
+        "east": "Wine Rack Corner",
+        "north": "Under the Stairs"
+      },
+      "items": ["empty bottle"]
+    },
+    {
+      "name": "Wine Rack Corner",
+      "description": "Dusty wooden racks line the walls, filled with broken and empty bottles. Cobwebs hang thick in the corners. The air feels slightly fresher here.",
+      "exits": {
+        "west": "Dark Cellar"
+      },
+      "items": ["rusty key"]
+    },
+    {
+      "name": "Under the Stairs",
+      "description": "This cramped area beneath the stairs is cluttered with debris. Among the broken wood and junk, something long and sturdy catches your eye.",
+      "exits": {
+        "south": "Dark Cellar",
+        "north": "Broken Staircase"
+      },
+      "items": ["sturdy plank"]
+    },
+    {
+      "name": "Broken Staircase",
+      "description": "You stand before a damaged staircase. Several steps are missing, leaving a dangerous gap. Without something to bridge it, climbing up seems impossible.",
+      "exits": {
+        "south": "Under the Stairs",
+        "up": "Upstairs Landing"
+      },
+      "items": []
+    },
+    {
+      "name": "Upstairs Landing",
+      "description": "You emerge into a dimly lit landing above the cellar. The air here is fresher. A sense of escape fills you. You have made it out.",
+      "exits": {
+        "down": "Broken Staircase"
+      },
+      "items": []
+    }
+  ]
+}

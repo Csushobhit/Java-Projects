@@ -1,0 +1,105 @@
+package com.textadventure.model;
+
+import com.textadventure.model.Item;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+public class Room {
+	private String name;
+	private String description;
+	
+	private Map<String, String> exists;
+	private List<Item> items;
+	public Room(String name, String description)
+	{
+		if(name == null || name.trim().isEmpty())
+		{
+			throw new IllegalArgumentException("Room cannot be be null or empty");
+		}
+		if(description == null)
+		{
+			throw new IllegalArgumentException("Room description cannot be be null or empty");
+		}
+		this.name = name.trim();
+		this.description = description;
+		
+		this.exists = new HashMap<>();
+		this.items = new ArrayList<>();
+	}
+	
+	
+	public String getName()
+	{
+		return this.name;
+	}
+	
+	public String getDescription()
+	{
+		return this.description;
+	}
+	public Map<String, String> getExits()
+	{
+		return this.exists;
+	}
+	public List<Item> getItems()
+	{
+		return this.items;
+	}
+	
+	public void addItem(Item item)
+	{
+		if(item == null)
+		{
+			throw new IllegalArgumentException("Cannot add a null item to the room");
+		}
+		this.items.add(item);
+	}
+	public boolean removeItem(Item item)
+	{
+		if(item == null)
+		{
+			throw new IllegalArgumentException("Cannot remove a null item from the room");
+		}
+		return this.items.remove(item);
+	}
+	
+	public void addExit(String direction, String destinationRoomName)
+	{
+		if(direction == null || direction.trim().isEmpty())
+		{
+			throw new IllegalArgumentException("Exit direction cannot be null or empty.");
+		}
+		if(destinationRoomName == null || destinationRoomName.trim().isEmpty())
+		{
+			throw new IllegalArgumentException("Exit direction room cannot be null or empty.");
+		}
+		String normalizedDirection = direction.trim().toLowerCase();
+		String trimmedDestination = destinationRoomName.trim();
+		
+		this.exists.put(normalizedDirection, trimmedDestination);
+	}
+	public Optional<Item> findItemByName(String itemName) {
+	    if (itemName == null || itemName.trim().isEmpty()) {
+	        return Optional.empty();
+	    }
+
+	    for (Item item : items) {
+	        if (item.getName().equalsIgnoreCase(itemName)) {
+	            return Optional.of(item);
+	        }
+	    }
+
+	    return Optional.empty();
+	}
+	public void setDescription(String newDescription)
+	{
+	    if(newDescription != null && !newDescription.trim().isEmpty())
+	    {
+	        this.description = newDescription;
+	    }
+	}
+}

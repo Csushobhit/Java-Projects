@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="selection" value="newDesc"/>
+		<item key="wrap" value="true"/>
+		<item key="casesensitive" value="false"/>
+		<item key="wholeword" value="false"/>
+		<item key="incremental" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<list key="findhistory">
+			<item value="newDesc"/>
+			<item value="System.out.println(newRoom.getDescripti"/>
+			<item value=".get(roomName)"/>
+			<item value="List&lt;String&gt;"/>
+			<item value="allGameItems.get"/>
+			<item value="player.setCurrentRoomName(targetRoomName);"/>
+			<item value="checkConditions"/>
+			<item value="currentRoom.getExits();"/>
+			<item value="Map&lt;String, String&gt; exists = currentRoom.getExits();"/>
+			<item value="usability.isConsumesItem()"/>
+			<item value="Map&lt;String, String&gt; exists"/>
+			<item value="Map&lt;String, String&gt; exits"/>
+			<item value="System.out.println(usability.getEffectDescription());"/>
+			<item value="for (Item item : currentRoom.getItems())"/>
+		</list>
+		<list key="replacehistory">
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="570"/>
+		<item key="DIALOG_Y_ORIGIN" value="566"/>
+		<item key="DIALOG_WIDTH" value="336"/>
+		<item key="DIALOG_HEIGHT" value="454"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+	</section>
+</section>
