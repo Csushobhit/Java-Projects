@@ -1,15 +1,10 @@
-<!-- TOP WAVE -->
+<!-- TOP WAVE WITH TEXT INSIDE -->
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=200&section=header&text=&fontSize=0"/>
-
-<h1 align="center">🎮 Text Adventure Game Engine</h1>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=220&section=header&text=🎮%20Text%20Adventure%20Game%20Engine&fontSize=38&fontAlignY=40&desc=Build%20rich,%20interactive%20text-based%20worlds%20with%20ease&descSize=16&descAlignY=60"/>
 
 <p align="center">
-  <b>Build rich, interactive text-based worlds with ease</b><br>
   <sub>Modular • JSON-driven • Extensible</sub>
 </p>
-
-
 
 <p align="center">
   <img src="https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java">
@@ -230,8 +225,6 @@ mvn exec:java -Dexec.mainClass="com.textadventure.Main"
 **Sushobhit Chattaraj**
 
 > “A game engine is not just code — it’s a system for creating worlds.”
-
-
 
 ---
 
