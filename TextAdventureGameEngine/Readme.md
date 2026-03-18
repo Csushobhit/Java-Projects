@@ -1,3 +1,7 @@
+<!-- TOP WAVE -->
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=200&section=header&text=&fontSize=0"/>
+
 <h1 align="center">🎮 Text Adventure Game Engine</h1>
 
 <p align="center">
@@ -5,9 +9,7 @@
   <sub>Modular • JSON-driven • Extensible</sub>
 </p>
 
-<!-- TOP WAVE -->
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=200&section=header&text=&fontSize=0"/>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java">
