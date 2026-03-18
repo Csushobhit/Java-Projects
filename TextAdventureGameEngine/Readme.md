@@ -5,13 +5,15 @@
   <sub>Modular • JSON-driven • Extensible</sub>
 </p>
 
+<!-- TOP WAVE -->
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=200&section=header&text=&fontSize=0"/>
+
 <p align="center">
   <img src="https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java">
   <img src="https://img.shields.io/badge/Maven-Build-blue?style=for-the-badge&logo=apachemaven">
   <img src="https://img.shields.io/badge/JSON-Driven-green?style=for-the-badge&logo=json">
   <img src="https://img.shields.io/badge/Type-CLI-purple?style=for-the-badge">
-  <img src="https://img.shields.io/badge/status-active-success?style=for-the-badge">
-  <img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge">
 </p>
 
 ---
@@ -110,13 +112,13 @@ TextAdventureGameEngine/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/textadventure/
-│   │   │   ├── engine/        # Game loading & parsing
-│   │   │   ├── game/          # Game loop & commands
-│   │   │   ├── model/         # Room, Item, Player, Conditions
-│   │   │   ├── utils/         # Save system
-│   │   │   └── Main.java      # Entry point
+│   │   │   ├── engine/
+│   │   │   ├── game/
+│   │   │   ├── model/
+│   │   │   ├── utils/
+│   │   │   └── Main.java
 │   │   └── resources/
-│   │       └── adventure.json # Game data
+│   │       └── adventure.json
 ├── pom.xml
 └── README.md
 ```
@@ -230,3 +232,7 @@ mvn exec:java -Dexec.mainClass="com.textadventure.Main"
 
 
 ---
+
+<!-- BOTTOM WAVE -->
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:2c5364,50:203a43,100:0f2027&height=120&section=footer"/>
