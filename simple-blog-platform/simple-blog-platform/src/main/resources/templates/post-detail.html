@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${post.title}">Post Title</title>
+</head>
+<body>
+
+    <article>
+        <h1 th:text="${post.title}">Post Title</h1>
+        <p>
+            <em>
+                Posted on 
+                <span th:text="${#temporals.format(post.createdAt, 'MMMM dd, yyyy')}">
+                    January 01, 2023
+                </span>
+            </em>
+        </p>
+        <div th:utext="${post.content}">
+            <p>Post content</p>
+        </div>
+    </article>
+
+    <hr/>
+
+    <section>
+        <h2>Comments</h2>
+
+        <div th:if="${!post.comments.isEmpty()}">
+            <div th:each="comment : ${post.comments}" style="margin-bottom: 20px; border-left: 2px solid #ccc; padding-left: 15px;">
+                <p th:text="${comment.content}">Comment</p>
+                <small>
+                    Comment by:
+                    <strong th:text="${comment.user != null ? comment.user.username : 'Anonymous'}">
+                        Username
+                    </strong>
+                    on
+                    <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy HH:mm')}">
+                        Date
+                    </span>
+                </small>
+            </div>
+        </div>
+
+        <div th:if="${post.comments.isEmpty()}">
+            <p>No comments yet. Be the first to share your thoughts!</p>
+        </div>
+    </section>
+
+    <hr/>
+
+    <section>
+        <h3>Leave a Comment</h3>
+
+        <div sec:authorize="isAuthenticated()">
+            <form th:action="@{/posts/{postId}/comments(postId=${post.id})}" th:object="${newComment}" method="post">
+                <div>
+                    <label for="comment-content">Your Comment:</label>
+                </div>
+                <div>
+                    <textarea id="comment-content" th:field="*{content}" rows="5" cols="50" required></textarea>
+                </div>
+                <div>
+                    <button type="submit">Submit Comment</button>
+                </div>
+            </form>
+        </div>
+
+        <div sec:authorize="isAnonymous()">
+            <p>
+                <a th:href="@{/login}">Log in</a> to leave a comment.
+            </p>
+        </div>
+    </section>
+
+</body>
+</html>
