@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Manage Posts</title>
+    <style>
+        body { font-family: sans-serif; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; }
+        thead { background-color: #f2f2f2; }
+        a { text-decoration: none; padding: 5px 10px; margin-right: 5px; }
+        .btn-edit { background-color: #ffc107; color: black; border-radius: 3px; }
+        .btn-delete { background-color: #dc3545; color: white; border-radius: 3px; }
+        .btn-create { background-color: #007bff; color: white; border-radius: 3px; display: inline-block; margin-bottom: 20px;}
+    </style>
+</head>
+<body>
+
+    <h1>Post Management Dashboard</h1>
+
+    <a th:href="@{/admin/posts/new}" class="btn-create">Create New Post</a>
+
+    <div th:if="${!posts.isEmpty()}">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="post : ${posts}">
+                    <td th:text="${post.id}">1</td>
+                    <td th:text="${post.title}">My First Post</td>
+                    <td th:text="${#temporals.format(post.createdAt, 'dd-MMM-yyyy HH:mm')}">01-Jan-2023 10:30</td>
+                    <td>
+                        <a th:href="@{/admin/posts/edit/{id}(id=${post.id})}" class="btn-edit">Edit</a>
+                        <form th:action="@{/admin/posts/delete/{id}(id=${post.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this post?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${posts.isEmpty()}">
+        <p>No posts found. Why not create one?</p>
+    </div>
+
+</body>
+</html>

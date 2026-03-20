@@ -59,7 +59,11 @@
                     <label for="comment-content">Your Comment:</label>
                 </div>
                 <div>
-                    <textarea id="comment-content" th:field="*{content}" rows="5" cols="50" required></textarea>
+                    <textarea id="comment-content" th:field="*{content}" rows="5" cols="50"></textarea>
+                    <div style="color: red; font-size: 0.9em; margin-top: 5px;"
+                         th:if="${#fields.hasErrors('content')}"
+                         th:errors="*{content}">
+                    </div>
                 </div>
                 <div>
                     <button type="submit">Submit Comment</button>

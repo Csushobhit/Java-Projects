@@ -1,6 +1,8 @@
 package com.blogplatform.simple_blog_platform.controller;
 
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+
 import java.util.List;
 import java.security.Principal;
 
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import com.blogplatform.simple_blog_platform.dto.CommentDto;
 import com.blogplatform.simple_blog_platform.model.Post;
 import com.blogplatform.simple_blog_platform.service.PostService;
+
+import jakarta.validation.Valid;
+
 import com.blogplatform.simple_blog_platform.service.CommentService;
 
 @Controller
@@ -35,7 +40,7 @@ public class PostController {
 
     @GetMapping("/posts/{id}")
     public String showPostDetailPage(@PathVariable Long id, Model model) {
-        Post post = postService.findPostById(id);
+        Post post = postService.findPostById(id).orElseThrow(() -> new IllegalArgumentException("Invalid post ID:" + id));
         if (post == null) {
             throw new IllegalArgumentException("Invalid post ID:" + id);
         }
@@ -46,9 +51,13 @@ public class PostController {
 
     @PostMapping("/posts/{postId}/comments")
     public String submitComment(@PathVariable Long postId,
-                               @ModelAttribute("newComment") CommentDto commentDto,
+                                @Valid @ModelAttribute("newComment") CommentDto commentDto, BindingResult bindingResult, 
                                Principal principal) {
-
+    	if(bindingResult.hasErrors())
+    	{
+    		 Post post = postService.findPostById(postId)
+                     .orElseThrow(() -> new IllegalArgumentException("Invalid post ID:" + postId));
+    	}
         String username = principal.getName();
 
         commentService.saveComment(postId, username, commentDto);
