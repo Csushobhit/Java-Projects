@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.blogplatform.simple_blog_platform.dto.CommentDto;
+import com.blogplatform.simple_blog_platform.exception.ResourceNotFoundException;
 import com.blogplatform.simple_blog_platform.model.Comment;
 import com.blogplatform.simple_blog_platform.model.Post;
 import com.blogplatform.simple_blog_platform.model.User;
@@ -32,10 +33,10 @@ public class CommentService {
     public void saveComment(Long postId, String username, CommentDto commentDto) {
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found with ID: " + postId));
+                 .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with username: " + username));
+        		.orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
 
         Comment comment = new Comment();
         comment.setContent(commentDto.getContent());

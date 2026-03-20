@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.blogplatform.simple_blog_platform.exception.ResourceNotFoundException;
 import com.blogplatform.simple_blog_platform.model.User;
 import com.blogplatform.simple_blog_platform.repository.UserRepository;
 
@@ -26,8 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with username: " + username));
+        		.orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
 
         List<GrantedAuthority> authorities =
                 Collections.singletonList(

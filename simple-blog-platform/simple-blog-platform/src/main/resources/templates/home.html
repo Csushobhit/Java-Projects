@@ -3,26 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <title>Simple Blog Platform</title>
+
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; }
+
+        .search-form-container {
+            margin-bottom: 30px;
+        }
+
+        .search-form-container input[type="text"] {
+            padding: 8px;
+            width: 70%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .search-form-container button {
+            padding: 9px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .pagination-container {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .pagination {
+            display: inline-block;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .pagination li {
+            display: inline;
+        }
+
+        .pagination li a, .pagination li span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #007bff;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .pagination li.active span {
+            z-index: 2;
+            color: #fff;
+            cursor: default;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .pagination li.disabled span {
+            color: #777;
+            cursor: not-allowed;
+            background-color: #fff;
+            border-color: #ddd;
+        }
+    </style>
 </head>
 <body>
 
     <h1>Welcome to the Blog!</h1>
 
-    <div th:if="${!posts.isEmpty()}">
+    <div class="search-form-container">
+        <form th:action="@{/}" method="get">
+            <input type="text" name="keyword" th:value="${param.keyword}" placeholder="Search by title..."/>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div th:if="${postPage.hasContent()}">
         <h2>Recent Posts</h2>
         <ul>
-            <li th:each="post : ${posts}">
+            <li th:each="post : ${postPage.content}">
                 <a th:href="@{/posts/{id}(id=${post.id})}">
                     <h2 th:text="${post.title}">Post Title</h2>
                 </a>
-                <p th:text="${post.content}">Post content will go here...</p>
+                <p th:text="${post.content}">Post content</p>
             </li>
         </ul>
     </div>
 
-    <div th:if="${posts.isEmpty()}">
+    <div th:if="${!postPage.hasContent()}">
         <p>No posts have been published yet. Check back soon!</p>
     </div>
+
+    <nav th:if="${postPage.totalPages > 1}" class="pagination-container">
+        <ul class="pagination">
+
+            <li th:classappend="${postPage.isFirst()} ? 'disabled' : ''">
+                <a th:href="${!postPage.isFirst()} ? @{/(page=${postPage.number - 1}, keyword=${keyword})} : '#'">
+                    &laquo; Previous
+                </a>
+            </li>
+
+            <li th:each="pageNum : ${#numbers.sequence(0, postPage.totalPages - 1)}"
+                th:classappend="${pageNum == postPage.number} ? 'active' : ''">
+                <a th:href="@{/(page=${pageNum}, keyword=${keyword})}" th:text="${pageNum + 1}"></a>
+            </li>
+
+            <li th:classappend="${postPage.isLast()} ? 'disabled' : ''">
+                <a th:href="${!postPage.isLast()} ? @{/(page=${postPage.number + 1}, keyword=${keyword})} : '#'">
+                    Next &raquo;
+                </a>
+            </li>
+
+        </ul>
+    </nav>
 
 </body>
 </html>

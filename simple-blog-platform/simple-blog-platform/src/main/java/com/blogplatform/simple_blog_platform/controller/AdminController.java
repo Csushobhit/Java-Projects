@@ -3,6 +3,9 @@ package com.blogplatform.simple_blog_platform.controller;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +19,7 @@ import com.blogplatform.simple_blog_platform.model.Post;
 import com.blogplatform.simple_blog_platform.service.PostService;
 
 import jakarta.validation.Valid;
-
+import org.springframework.data.domain.Sort;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -28,11 +31,14 @@ public class AdminController {
 	}
 	
 	@GetMapping("/posts")
-	public String showPostListDashboard(Model model)
-	{
-		List<Post> allPosts = postService.findAllPosts();
-		model.addAttribute("posts", allPosts);
-		return "admin/list-posts";
+	public String showPostListDashboard(Model model,
+	        @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC)
+	        Pageable pageable) {
+
+	    Page<Post> postPage = postService.findAllPosts(pageable);
+	    model.addAttribute("postPage", postPage);
+
+	    return "admin/list-posts";
 	}
 	
 	@GetMapping("/posts/new")

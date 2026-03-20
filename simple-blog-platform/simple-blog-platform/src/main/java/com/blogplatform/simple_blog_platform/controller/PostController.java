@@ -1,18 +1,24 @@
 package com.blogplatform.simple_blog_platform.controller;
 
 import org.springframework.ui.Model;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
 import java.security.Principal;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.blogplatform.simple_blog_platform.dto.CommentDto;
+import com.blogplatform.simple_blog_platform.exception.ResourceNotFoundException;
 import com.blogplatform.simple_blog_platform.model.Post;
 import com.blogplatform.simple_blog_platform.service.PostService;
 
@@ -32,15 +38,28 @@ public class PostController {
     }
 
     @GetMapping("/")
-    public String showHomePage(Model model) {
-        List<Post> allPosts = postService.findAllPosts();
-        model.addAttribute("posts", allPosts);
+    public String showHomePage(Model model,
+                              @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC)
+                              Pageable pageable,
+                              @RequestParam(value = "keyword", required = false) String keyword) {
+
+        Page<Post> postPage;
+
+        if (keyword != null && !keyword.isBlank()) {
+            postPage = postService.searchByTitle(keyword, pageable);
+            model.addAttribute("keyword", keyword);
+        } else {
+            postPage = postService.findAllPosts(pageable);
+        }
+
+        model.addAttribute("postPage", postPage);
+
         return "home";
     }
 
     @GetMapping("/posts/{id}")
     public String showPostDetailPage(@PathVariable Long id, Model model) {
-        Post post = postService.findPostById(id).orElseThrow(() -> new IllegalArgumentException("Invalid post ID:" + id));
+        Post post = postService.findPostById(id).orElseThrow(() -> new ResourceNotFoundException("Post not found with Id:" + id));
         if (post == null) {
             throw new IllegalArgumentException("Invalid post ID:" + id);
         }
