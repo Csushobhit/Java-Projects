@@ -1,0 +1,149 @@
+/* BACKGROUND */
+body {
+	
+    margin: 0;
+    font-family: 'Cinzel', serif;
+    background-color: #f4f4f4;
+    background-image: radial-gradient(#dcdcdc 1px, transparent 1px);
+    background-size: 18px 18px;
+}
+
+/* WRAPPER */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+/* MAIN BOX */
+.main-box {
+    width: 85%;
+    background: #f8f8f8;
+    border: 2px solid black;
+    border-radius: 30px;
+    padding: 30px 40px;
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* CENTER NAV */
+.nav-center a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+}
+
+/* RIGHT */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* BUTTON */
+.btn {
+    padding: 8px 20px;
+    border-radius: 25px;
+    border: none;
+    background: linear-gradient(90deg, #000000, #2f2fbf);
+    color: white;
+    font-size: 14px;
+}
+
+/* USER */
+.user-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* AVATAR */
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #cfcfe8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar.admin {
+    background: #8d8dd8;
+}
+
+/* HERO */
+.hero {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.hero h1 {
+    font-size: 32px;
+    letter-spacing: 2px;
+}
+
+/* SEARCH */
+.search-box {
+    margin-top: 20px;
+}
+
+.search-box input {
+    width: 320px;
+    height: 42px;
+    border-radius: 25px;
+    border: none;
+    background: #dcdce5;
+}
+
+.search-box button {
+    margin-left: 15px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    background: linear-gradient(90deg, #000, #2f2fbf);
+    color: white;
+}
+
+/* POSTS GRID */
+.posts {
+    margin-top: 40px;
+}
+
+/* GRID FIXED */
+.grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+/* POST CARD (4:5 FEEL) */
+.post-card {
+    width: 180px;
+    height: 220px;
+    background: black;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.post-card span {
+    color: white;
+    font-size: 18px;
+}
+
+.empty {
+    text-align: center;
+}
